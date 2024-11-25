@@ -9,6 +9,7 @@ componentDidMount(){
     this.EncontrarProductos();
 }
 
+// Metodo para obtiene los productos de la base de datos
 EncontrarProductos = async () => {
     const productosCollection = collection(db, 'productos');
     const querySnapshot = await getDocs(productosCollection);
@@ -21,9 +22,10 @@ EncontrarProductos = async () => {
     this.setState({productos});
 };
 
+// Interfaz para el usuario, donde podra ver el listado de los productos
 render(){
     const { productos } = this.state;
-
+ 
     return (
         <div>
             <h1>Lista de Productos</h1>

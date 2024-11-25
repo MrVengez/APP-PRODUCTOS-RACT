@@ -13,7 +13,7 @@ class App extends Component {
   handleSelectComponent = (component) => {
     this.setState({ selectedComponent: component });
   };
-
+// Render interfaz de usuario, sidebar para elegir entre el carrito de productos y agregar productos a la base de datos.
   render() {
     const { selectedComponent } = this.state;
     return (

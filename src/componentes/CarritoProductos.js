@@ -14,7 +14,7 @@ class CarritoProductos extends Component {
         this.CarritoProductos();
     }
 
-    // Cargar productos desde Firestore
+// Cargar productos desde Firestore
     CarritoProductos = async () => {
         try {
             const productosCollection = collection(db, 'productos');
@@ -30,12 +30,12 @@ class CarritoProductos extends Component {
         }
     };
 
-    // Agregar producto al carrito
+// Agregar producto al carrito
     addToCart = (producto) => {
         const productoEnCarro = this.state.carro.find(item => item.id === producto.id);
 
         if (productoEnCarro) {
-            // Si el producto ya está en el carrito y hay stock disponible, aumentamos la cantidad
+// Si el producto ya está en el carrito y hay stock disponible, aumentamos la cantidad
             if (productoEnCarro.quantity < producto.quantity) {
                 const ActualizarCarro = this.state.carro.map(item =>
                     item.id === producto.id ? { ...item, quantity: item.quantity + 1 } : item
@@ -43,14 +43,14 @@ class CarritoProductos extends Component {
                 this.setState({ carro: ActualizarCarro });
             }
         } else {
-            // Si el producto no está en el carrito, lo agregamos con cantidad 1
+// Si el producto no está en el carrito, lo agregamos con cantidad 1
             this.setState(prevState => ({
                 carro: [...prevState.carro, { ...producto, quantity: 1 }]
             }));
         }
     };
 
-    // Eliminar producto del carrito
+// Eliminar producto del carrito
     removeFromCarro = (Idproducto) => {
         const productoExistente = this.state.carro.find(item => item.id === Idproducto);
         if (productoExistente) {
@@ -59,15 +59,15 @@ class CarritoProductos extends Component {
         }
     };
 
-    // Calcular el total del carrito
+// Calcular el total del carrito
     calcularTotal = () => {
         const total = this.state.carro.reduce((total, item) => total + item.price * item.quantity, 0);
         return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'CLP' }).format(total);  
     };
-
+// Render interface de usuario, lista de productos y carrito de compras
     render() {
         const { productos, loading, carro } = this.state;
-
+// Mensaje de carga mientras cargan los productos
         if (loading) {
             return <p>Cargando productos...</p>;
         }
@@ -88,6 +88,8 @@ class CarritoProductos extends Component {
                                         onClick={() => this.addToCart(producto)}
                                         disabled={producto.quantity === 0 || this.state.carro.some(item => item.id === producto.id && item.quantity >= producto.quantity)}
                                     >
+                                        {/* Si el producto añadido al carrito sobrepasa el stock que muestra el producto este bloquea
+                                        muestra un mensaje de agotado en el carrito */}
                                         {this.state.carro.some(item => item.id === producto.id && item.quantity >= producto.quantity) 
                                           ? 'Agotado en carrito' 
                                           : 'Agregar al carrito'}
@@ -107,6 +109,7 @@ class CarritoProductos extends Component {
                                 <img src={item.photo} alt={item.name} width="50" />
                                 <p>{item.name}</p>
                                 <p>${item.price * item.quantity} x {item.quantity}</p>
+                                {/* Boton para eliminar productos en el carrito */}
                                 <button onClick={() => this.removeFromCarro(item.id)}>Eliminar</button>
                             </li>
                         ))}
